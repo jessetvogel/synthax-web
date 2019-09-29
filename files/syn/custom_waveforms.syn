@@ -1,0 +1,11 @@
+# We can load a custom waveform from a .wav file using the following instruction:
+wave "my_sample" "sample.wav"
+
+# Use custom waveform in synth
+group A: voices = 16
+A oscillator osc: frequency = key_frequency, wave = "my_sample", amplitude = env
+A adsr env: attack = 0.01, decay = 0.01, sustain = 1.0, release = 0.01
+output osc
+
+# "my_sample" will now also be displayed in menus
+ui menu: target = osc, label = "waveform"

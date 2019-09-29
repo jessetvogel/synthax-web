@@ -1,0 +1,11 @@
+# Note: make sure you have a stereo output for this example.
+
+# In order to output a signal (without panning), we use the output-instruction:
+oscillator osc_1: frequency = 220, wave = "sine", amplitude = 0.1
+output osc_1
+
+# Panning can be used by passing an additional parameter in the output-instruction:
+# a value of '-1' means left panning and '+1' means right panning.
+oscillator osc_2: frequency = 440, wave = "triangle", amplitude = 0.2
+oscillator LFO: frequency = 0.5
+output osc_2 @ LFO

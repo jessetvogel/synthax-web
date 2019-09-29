@@ -1,0 +1,26 @@
+# Create group with oscillator + filter
+group A: voices = 16
+A oscillator osc: frequency = key_frequency, wave = "sine", amplitude = env
+A adsr env: attack = 0.01, decay = 0.01, sustain = 1.0, release = 0.01
+A filter flt: input = osc, frequency = cutoff
+param cutoff: min = 50, max = 10000, curve = "exp", value = 0.5
+output flt
+
+# Now we create some UI elements:
+
+# Menu's can be used to change waveforms, filter types or group modes
+ui menu: x = 0, y = 0, target = osc, category = "wave", label = "wave"
+ui menu: x = 0, y = 1, target = flt, category = "filter", label = "filter"
+ui menu: x = 0, y = 2, target = A, category = "mode", label = "mode"
+
+# Knobs can be used to control param nodes
+ui knob: x = 2, y = 0, param = cutoff, label = "cutoff"
+
+# A keyboard shows the keys currently pressed, and can also be used to press keys
+ui keyboard: x = 0, y = 4, width = 5, range = "C3 to C6"
+
+# Boxes are just a colored rectangle in the background, and can be used
+# to visually group elements, or just for decoration
+ui box: x = 0, y = 0, width = 1, height = 3, color = "#5eb532", rounded = 0.1
+ui box: x = 2, y = 0, width = 1, height = 3, color = "#32b59d", rounded = 0.1
+ui box: x = 4, y = 0, width = 1, height = 3, color = "#3264b5", rounded = 0.1

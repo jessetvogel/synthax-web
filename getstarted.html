@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<title>Get started</title>
+		<link rel="icon" href="/img/favicon.png">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+	</head>
+	<body>
+		<div id="header">
+			<a href="/"><img src="/img/synthax-logo.png" alt /></a>
+			<span>Synthax</span>
+		</div>
+		<div style="padding: 0px 8px;" id="content">
+			<p>
+				Synthesizer configurations can be specified in a text files by a list of instructions. Each instruction describes either part of the audial component of the synthesizer, or part of the visual component.
+
+				Below are some examples of how such files can be created. For a full overview of the possiblities, take a look at the <a target="_blank" href="/doc.html">documentation</a>. Now, open your favorite text-editor and let's get started!
+			</p>
+			<h2>Example 1: creating oscillators</h2>
+			<p>
+				Create a text-file with the following instructions:
+			</p>
+			<div class="code">
+				oscillator osc: frequency = 440, amplitude = 0.2, wave = "saw"<br/>
+				output osc
+			</div>
+			<p>
+				The first line creates an <span class="mono">oscillator</span> node (that we name <span class="mono">osc</span>) that oscillates at 440Hz with an amplitude of 0.2 with a sawtooth waveform. The second line says that the signal produced by this oscillator is to be outputted. When loaded into Synthax, it should sound as follows:
+			</p>
+			<p class="centered">
+				<audio controls>
+	  					<source src="/audio/example-1-1.wav" type="audio/wav">
+						Your browser does not support the audio element.
+				</audio>
+			</p>
+			<p>
+				Now consider the following change:
+			</p>
+			<div class="code">
+				oscillator osc: frequency = 440, amplitude = 0.2, wave = "saw", <span class="highlight">detune = LFO * 50</span> <br/>
+				<span class="highlight">oscillator LFO: frequency = 1</span> <br/>
+				output osc
+			</div>
+			<p>
+				Here we connected a low-frequency oscillator (<span class="mono">LFO</span>) to the detuning of our oscillator <span class="mono">osc</span>, so that the detuning will oscillate between <span style="position: relative; top: -2px;">±</span>50 cents. Note that an audio node can be referenced before it is defined.
+			</p>
+			<p class="centered">
+				<audio controls>
+	  					<source src="/audio/example-1-2.wav" type="audio/wav">
+						Your browser does not support the audio element.
+				</audio>
+			</p>
+			<p>
+				Finally, suppose that we want to route this signal through a low-pass filter with some resonance (say a Q-factor of 3) and oscillating cutoff frequency (say between 0Hz and 10,000Hz). We make the following changes:
+			</p>
+			<div class="code">
+				oscillator osc: frequency = 440, amplitude = 0.2, wave = "saw", detune = LFO * 50<br/>
+				oscillator LFO: frequency = 1<br/>
+				<span class="highlight">filter flt: input = osc, frequency = 5000 + 5000 * LFO, Q = 3</span><br/>
+				output <span class="highlight">flt</span>
+			</div>
+			<p class="centered">
+				<audio controls>
+	  					<source src="/audio/example-1-3.wav" type="audio/wav">
+						Your browser does not support the audio element.
+				</audio>
+			</p>
+
+			<h2>Example 2: responding to MIDI input</h2>
+			<p>
+				Now we want to create a synth that responds to key presses on a connected MIDI device. For this, we would need as many oscillators as the maximum number of keys that we allow to be pressed simultaniously. To do so, we create a <i>group</i> that keeps track of the keys pressed, and assigns unused oscillators (and other nodes) to the keys.
+			</p>
+			<div class="code">
+				group A: voices = 16<br/>
+				A oscillator osc: frequency = key_frequency, wave = "triangle", amplitude = env<br/>
+				A adsr env: attack = 0.0, decay = 0.2, sustain = 0.2, release = 0.5<br/>
+				<br/>
+				output osc
+			</div>
+			<p>
+				The first line creates a group named <span class="mono">A</span> that allows for 16 notes to be played at once. In this group we put a family of oscillators and ADSR-envelopes that are connected. Note that the oscillator is set to oscillate at <span class="mono">key_frequency</span>, which refers to the frequency of the note that it is assigned to. Now the synth should react to playing notes on your keyboard.
+			</p>
+			<p class="centered">
+				<audio controls>
+					<source src="/audio/example-2-1.wav" type="audio/wav">
+					Your browser does not support the audio element.
+				</audio>
+			</p>
+			<p>
+				It is possible to change how a group responds to key presses by settings its <span class="mono">mode</span>. The following adjustment makes the group <i>monophonic</i>, i.e. it only uses one voice at a time. The <span class="mono">glide</span> parameter specifies how long it should take (in seconds per octave) for <span class="mono">key_frequency</span> to 'glide' between consecutive notes.
+			</p>
+			<div class="code">
+				group A: voices = 16, <span class="highlight">mode = "mono", glide = 0.2</span><br/>
+				A oscillator osc: frequency = key_frequency, wave = "triangle", amplitude = env<br/>
+				A adsr env: attack = 0.0, decay = 0.0, sustain = 0.2, release = 0.5<br/>
+				<br/>
+				output osc
+			</div>
+			<p class="centered">
+				<audio controls>
+					<source src="/audio/example-2-2.wav" type="audio/wav">
+					Your browser does not support the audio element.
+				</audio>
+			</p>
+
+			<h2>Example 3: creating a user interface</h2>
+			<p>
+				In order to change parameters while playing, we must create visual components that the player can interact with. Suppose we have an oscillator that is passed through a low-pass filter, and we want to control the filter's cutoff frequency.
+			</p>
+			<div class="code">
+				oscillator osc: wave = "square", frequency = 100, amplitude = 0.2<br/>
+				filter flt: input = osc, frequency = cutoff<br/>
+				output flt<br/>
+				<br/>
+				param cutoff: min = 50, max = 5000, curve = "exp"<br/>
+				ui knob: param = cutoff, x = 0, y = 0, label = "cutoff"
+			</div>
+			<p>
+				A <span class="mono">param</span> node denotes a parameter that can be controlled through MIDI. We have set its minimum value to 50, its maximum to 5000, with exponential interpolation. The last line create a knob that is linked to this parameter. This looks like:
+			</p>
+			<p class="centered">
+				<img src="/img/examples/example-3-1.png" />	
+			</p>
+			<p>
+				Now turning the knob should affect the cutoff frequency of the filter. It is also possible to control the knob via MIDI: right-click the knob and then turn a knob or move a slider on your MIDI controller to link it to the parameter.
+			</p>
+			<p class="centered">
+				<audio controls>
+					<source src="/audio/example-3-1.wav" type="audio/wav">
+					Your browser does not support the audio element.
+				</audio>
+			</p>
+			<p>
+				The <span class="mono">x</span> and <span class="mono">y</span> coordinates refer to a grid of 64 x 64 pixels. For example, if we add some more visual components,
+			</p>
+			<div class="code">
+				...<br/>
+				ui keyboard: x = 1, y = 0, width = 4, range = "C3 to C5"<br/>
+				ui box: x = 0, y = -0.25, width = 5.25, height = 1.5, color = "#3280b5", rounded = 0.1
+			</div>
+			<p>
+				it will result in the following:
+			</p>
+			<p class="centered">
+				<img src="/img/examples/example-3-2.png" />	
+			</p>
+			<h2>More examples</h2>
+			<p>
+				For more examples, take a look at and inspect the following files:
+			</p>
+			<ul>
+				<li><a target="_blank" href="/files/syn/ui_elements.syn">ui_elements.syn</a>: more on UI elements</li>
+				<li><a target="_blank" href="/files/syn/pitch_mod_wheels.syn">pitch_mod_wheels.syn</a>: on using the pitch and modulation wheels</li>
+				<li><a target="_blank" href="/files/syn/custom_waveforms.syn">custom_waveforms.syn</a>: on how to use your own waveforms (makes use of a <a target="_blank" href="/files/wav/sample.wav">custom waveform</a>, which is to be placed in the same directory as the synth file).</li>
+				<li><a target="_blank" href="/files/syn/audio_input.syn">audio_input.syn</a>: on how to use audio input from your microphone</li>
+				<li><a target="_blank" href="/files/syn/panning.syn">panning.syn</a>: on how to apply panning to create stereo sounds</li>
+			</ul>
+		</div>
+		<div id="footer"><span>Comments, tips, suggestions or found a bug? Mail me at <a href="mailto:info@synthax.cc">info@synthax.cc</a></span></div>
+	</body>
+</html>

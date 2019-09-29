@@ -1,0 +1,11 @@
+# If an audio input device is selected, the input signal will be given by 'audio_input'.
+# Lets route the signal through some audio nodes:
+
+clip clipped: input = audio_input, max = 0.2, soft = 0.33
+filter filtered: input = clipped + delayed * 0.25, frequency = 500
+delay delayed: input = filtered, max_time = 1.0, time = 0.5
+
+output filtered
+
+# If you have selected a stereo input device, you can access the left and right channels
+# individually with 'audio_input_left' and 'audio_input_right'

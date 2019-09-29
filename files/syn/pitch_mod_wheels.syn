@@ -1,0 +1,22 @@
+# In this example, we use the pitch & modulation wheels to alter the note frequencies
+# of the notes that we play.
+
+# 'mod_wheel' refers to the current position of the modulation wheel, as a number
+# between 0 and 1. So, the following oscillator will produce a zero signal if the
+# modulation wheel is down, and oscillate between +/- 50 when the modulation wheel
+# is completely up.
+
+oscillator MOD: frequency = 5, amplitude = mod_wheel * 50
+
+# 'pitch_bend' refers to the current pitch bend (in cents). By default, this value
+# ranges from +/- 200 cents, but this amount can be changed in the preferences tab.
+
+# Now we create a simple synth whose detuning is affected by both the pitch and
+# modulation wheel:
+
+group A: voices = 16
+A oscillator osc: frequency = key_frequency, wave = "triangle", amplitude = env, detune = pitch_bend + MOD
+A adsr env: attack = 0.01, decay = 0.01, sustain = 1.0, release = 0.01
+output osc
+
+ui keyboard

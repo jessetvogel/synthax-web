@@ -1,0 +1,293 @@
+@font-face {
+  font-family: "museosans";
+  src: url("/fonts/museosans-300.ttf");
+}
+@font-face {
+  font-family: "museosans";
+  src: url("/fonts/museosans-500.ttf");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "consolas";
+  src: url("/fonts/consolas.ttf");
+}
+html {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "museosans";
+  background: #efebe9;
+  color: #263238;
+  font-size: 16px;
+  position: relative;
+  margin: 0px;
+  padding: 0px 0px 96px 0px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+  margin: 0px auto;
+}
+#header img {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  border-radius: 32px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+}
+#header span {
+  font-size: 64px;
+  font-weight: bold;
+  margin-left: 16px;
+}
+
+#content {
+  margin: 0px auto;
+  box-sizing: border-box;
+  width: 1024px;
+  max-width: 100%;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 96px;
+  padding: 0px 8px;
+  box-sizing: border-box;
+  background-color: #e0d8d4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #998073;
+}
+
+.two-columns {
+  margin: 16px 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.two-columns > div {
+  box-sizing: border-box;
+  width: 50%;
+  min-width: 320px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.two-columns > div:first-child {
+  padding: 0px 8px;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 0px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+}
+.video-wrapper iframe {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+.image-wrapper {
+  padding: 0% 10%;
+}
+.image-wrapper img {
+  width: 100%;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  width: 192px;
+  height: 48px;
+  color: white;
+  border-radius: 4px;
+  transition: 0.2s;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+  text-decoration: none;
+}
+.button img {
+  width: 20px;
+  height: 20px;
+  margin-left: 16px;
+}
+.button span {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#download-buttons {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+#download-buttons .button {
+  margin: 24px;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 16px 0px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 8px 0px;
+}
+
+#button-macos {
+  background-color: #263238;
+}
+#button-macos:hover {
+  background-color: #3b4d56;
+}
+
+#button-windows {
+  background-color: #3280b5;
+}
+#button-windows:hover {
+  background-color: #4c99ce;
+}
+
+#button-download {
+  background-color: #3280b5;
+}
+#button-download:hover {
+  background-color: #4c99ce;
+}
+
+a {
+  color: #3280b5;
+}
+
+.slideshow {
+  position: relative;
+  margin: 16px;
+}
+.slideshow img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  animation: slideshow 12s infinite;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+.slideshow img:first-child {
+  position: initial;
+}
+.slideshow img:nth-child(2) {
+  animation-delay: -6s;
+}
+
+p {
+  line-height: 24px;
+}
+p.centered {
+  text-align: center;
+}
+
+ul {
+  padding-inline-start: 16px;
+  line-height: 32px;
+}
+ul li {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+div.code {
+  padding: 4px 0px 4px 16px;
+  margin: 8px 0px 8px 0px;
+  font-family: "consolas";
+  line-height: 24px;
+  border-left: solid #3280b5 3px;
+  white-space: nowrap;
+  overflow: scroll;
+}
+div.code .highlight {
+  padding: 4px 0px;
+  position: relative;
+}
+div.code .highlight:before {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  left: -6px;
+  width: 100%;
+  height: 100%;
+  padding: 0px 6px;
+  border-radius: 6px;
+  background: #f5d265;
+}
+
+.mono {
+  font-family: "consolas";
+}
+
+@keyframes slideshow {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+audio {
+  width: 300px;
+  height: 40px;
+}
+
+ul {
+  margin-left: 4px;
+}
+ul li {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+p.centered img {
+  max-width: 80%;
+}
